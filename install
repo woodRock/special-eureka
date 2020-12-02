@@ -1,0 +1,27 @@
+#! /bin/bash
+
+# Author: Jesse Wood 
+# 
+# These are the necessary packages required to install a TFTP server.
+# This stands for Trivial File Tranfer Protocol, they least secure method.
+# These can be used for Pre-boot Execution Environments (PXE).
+# Basically we can boot a computer from a disc image from a local network.
+
+# Super user permissions required to write to /etc directory.
+sudo -s
+
+# Install the packages to run a tftp server.
+apt install xinetd tftpd tftp
+
+# Set the configuration settings for the server.
+mkdir -p /etc/xinetd.d/
+touch /etc/xinetd.d/tftp
+cat tftp.conf > /etc/xinetd.d/tftp
+
+# Directory that stores the files for the server.
+mkdir -p /tftpboot
+chmod -R 777 /tftpboot
+chown -R nobody /tftpboot
+
+# Resets the configuration for our TFTP server
+service xinetd restart
